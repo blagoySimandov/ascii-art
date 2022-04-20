@@ -1,24 +1,17 @@
 package main
 
+// Importing the needed packages
 import (
 	"fmt"
 	"image"
-
-	"github.com/nfnt/resize"
-
 	_ "image/jpeg"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/nfnt/resize"
 )
 
-/*
-type Pixel struct {
-	R int
-	G int
-	B int
-}
-*/
 func check(err error) {
 	if err != nil {
 		panic(err)
@@ -26,29 +19,33 @@ func check(err error) {
 }
 
 func main() {
+	//Creating a slice out of all the ascii characters sorted by character density
 	ascii := strings.Split("`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$", "")
 	var arr []string
+
 	file, err := os.Open("images/ascii-pineapple.jpg")
 
 	if err != nil {
 		fmt.Println("Error: Image could not be opened")
 		os.Exit(1)
 	}
+	//Create a 2D array out of the pixels in the image
 	pixels, err := getPixels(file, 280)
 	if err != nil {
 		fmt.Println("Error: Image could not be decoded")
 		os.Exit(1)
 	}
+	//creating a scale for how much of each gray scale color (0-256) should corespond to one ascii character
 	scale := 256 / len(ascii)
 	var picture [][]string
 	fmt.Println(len(pixels))
 	fmt.Println(len(pixels[0]))
 	fmt.Println(len(pixels[1]))
+	//Iterating through the 2d array pixels and mapping  the position of each ascii character coresponding to the grayscale value of the pixel in the original image
 	for _, x := range pixels {
 		for _, y := range x {
 			if (y / scale) > len(ascii)-1 {
 				arr = append(arr, string(ascii[len(ascii)-1]))
-
 			} else {
 				fmt.Println(y / scale)
 				arr = append(arr, string(ascii[y/scale]))
@@ -61,6 +58,8 @@ func main() {
 		fmt.Println(row)
 	}
 }
+
+//The function that creates a 2d array ut of the grayscale values of the pixels in the original image
 func getPixels(file io.Reader, size uint) ([][]int, error) {
 	imageDecoded, _, err := image.Decode(file)
 	check(err)
@@ -78,12 +77,8 @@ func getPixels(file io.Reader, size uint) ([][]int, error) {
 	}
 	return pixels, nil
 }
-func rgbaToPixel(r uint32, g uint32, b uint32, a uint32) int {
-	//Pixel{int(r / 257), int(g / 257), int(b / 257)}
-	return (int(r/257) + int(g/257) + int(b/257)) / 3
-}
 
+//function that takes in RGBA values and outputs the average value (aka the grayscale value)
 func rgbaToAverageMapping(r uint32, g uint32, b uint32, a uint32) int {
-	//Pixel{int(r / 257), int(g / 257), int(b / 257)}
 	return (int(r/257) + int(g/257) + int(b/257)) / 3
 }

@@ -12,23 +12,16 @@ import (
 	"github.com/nfnt/resize"
 )
 
-func check(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 func main() {
 	//Creating a slice out of all the ascii characters sorted by character density
 	ascii := strings.Split("`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$", "")
-	var arr []string
 
 	file, err := os.Open("images/ascii-pineapple.jpg")
-
 	if err != nil {
 		fmt.Println("Error: Image could not be opened")
 		os.Exit(1)
 	}
+
 	//Create a 2D array out of the pixels in the image
 	pixels, err := getPixels(file, 280)
 	if err != nil {
@@ -38,9 +31,7 @@ func main() {
 	//creating a scale for how much of each gray scale color (0-256) should corespond to one ascii character
 	scale := 256 / len(ascii)
 	var picture [][]string
-	fmt.Println(len(pixels))
-	fmt.Println(len(pixels[0]))
-	fmt.Println(len(pixels[1]))
+	var arr []string
 	//Iterating through the 2d array pixels and mapping  the position of each ascii character coresponding to the grayscale value of the pixel in the original image
 	for _, x := range pixels {
 		for _, y := range x {
@@ -59,10 +50,13 @@ func main() {
 	}
 }
 
-//The function that creates a 2d array ut of the grayscale values of the pixels in the original image
+//Function that creates a 2d array out of the grayscale values of the pixels in the original image
 func getPixels(file io.Reader, size uint) ([][]int, error) {
 	imageDecoded, _, err := image.Decode(file)
-	check(err)
+	if err != nil {
+		fmt.Println("Error: Image could not be decoded")
+		os.Exit(1)
+	}
 	img := resize.Resize(size, 0, imageDecoded, resize.Lanczos2)
 	bounds := img.Bounds()
 	w, h := bounds.Max.X, bounds.Max.Y

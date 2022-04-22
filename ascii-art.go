@@ -74,5 +74,5 @@ func getPixels(file io.Reader, size uint) ([][]int, error) {
 
 //function that takes in RGBA values and outputs the average value (aka the grayscale value)
 func rgbaToAverageMapping(r uint32, g uint32, b uint32, a uint32) int {
-	return (int(r/257) + int(g/257) + int(b/257)) / 3
+	return (int(r>>8) + int(g>>8) + int(b>>8)) / 3
 }

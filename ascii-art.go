@@ -15,7 +15,6 @@ import (
 func main() {
 	//Creating a slice out of all the ascii characters sorted by character density
 	ascii := strings.Split("`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$", "")
-
 	file, err := os.Open("images/ascii-pineapple.jpg")
 	if err != nil {
 		fmt.Println("Error: Image could not be opened")
@@ -38,7 +37,6 @@ func main() {
 			if (y / scale) > len(ascii)-1 {
 				arr = append(arr, string(ascii[len(ascii)-1]))
 			} else {
-				fmt.Println(y / scale)
 				arr = append(arr, string(ascii[y/scale]))
 			}
 		}

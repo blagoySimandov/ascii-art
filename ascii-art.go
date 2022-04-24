@@ -15,12 +15,14 @@ import (
 func main() {
 	//Creating a slice out of all the ascii characters sorted by character density
 	ascii := strings.Split("`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$", "")
-	file, err := os.Open("images/ascii-pineapple.jpg")
+	fmt.Println("Please input the name of the file located in the images folder that you want to turn into ASCII:")
+	var fileName string
+	fmt.Scanln(&fileName)
+	file, err := os.Open("images/" + fileName)
 	if err != nil {
 		fmt.Println("Error: Image could not be opened")
 		os.Exit(1)
 	}
-
 	//Create a 2D array out of the pixels in the image
 	pixels, err := getPixels(file, 280)
 	if err != nil {
